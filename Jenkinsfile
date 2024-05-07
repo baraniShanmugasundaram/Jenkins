@@ -20,7 +20,7 @@ pipeline {
         }
         stage('Code Quality Check') {
             steps {
-                echo "Checking"
+                echo "Checking the stages of the code..."
             }
         }
         stage('Deploy') {
