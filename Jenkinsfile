@@ -11,7 +11,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo "Fetching the source code from: $CODE_DIRECTORY"
+                echo "Fetching the source code from: $CODE_DIRECTORY" 
                 echo "Compiling the code and generating artifacts"
                 // Add actual build steps here
             }
