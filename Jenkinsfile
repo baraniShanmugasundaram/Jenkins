@@ -15,7 +15,7 @@ pipeline {
                 echo "Compiling the code and generating artifacts"
                 // Add actual build steps here
             }
-        }
+        } 
         stage('Unit and Integration Tests') {
             steps {
                 echo "Running unit tests"
