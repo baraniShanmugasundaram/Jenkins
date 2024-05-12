@@ -8,7 +8,7 @@ pipeline {
         NOTIFICATION_EMAIL = "barani6778@gmail.com"
     }
 
-    stages {
+    stages { 
         stage('Build') {
             steps {
                 echo "Fetching the source code from: $CODE_DIRECTORY"
