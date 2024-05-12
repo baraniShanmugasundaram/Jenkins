@@ -5,41 +5,73 @@ pipeline {
         TESTING_ENVIRONMENT = 'Testing'
         PRODUCTION_ENVIRONMENT = 'Barani'
     }
+    pipeline {
+    agent any
+
     stages {
         stage('Build') {
             steps {
-                echo "Fetching source code from ${DIRECTORY_PATH}"
-                echo "Compiling the code and generating artifacts"
+                echo 'Building the code...'
+                // Tool: Maven
             }
         }
-        stage('Test') {
+        
+        stage('Unit and Integration Tests') {
             steps {
-                echo "Running unit tests"
-                echo "Running integration tests"
+                echo 'Running unit tests...'
+                // Tool: JUnit
+                echo 'Running integration tests...'
+                // Tool: Selenium
             }
         }
-        stage('Code Quality Check') {
+        
+        stage('Code Analysis') {
             steps {
-                echo "Checking the stages of the code..."
+                echo 'Running code analysis...'
+                // Tool: SonarQube
             }
         }
-        stage('Deploy') {
+        
+        stage('Security Scan') {
             steps {
-                echo "Deploying the application to ${TESTING_ENVIRONMENT} environment"
+                echo 'Performing security scan...'
+                // Tool: OWASP ZAP
             }
         }
-        stage('Approval') {
+        
+        stage('Deploy to Staging') {
             steps {
-                script {
-                    echo "Waiting for manual approval..."
-                    sleep 10
-                }
+                echo 'Deploying to staging server...'
+                // Tool: AWS CLI
             }
         }
+        
+        stage('Integration Tests on Staging') {
+            steps {
+                echo 'Running integration tests on staging...'
+                // Tool: Postman
+            }
+        }
+        
         stage('Deploy to Production') {
             steps {
-                echo "Deploying the application to ${PRODUCTION_ENVIRONMENT} environment"
+                echo 'Deploying to production server...'
+                // Tool: AWS CLI
             }
         }
     }
+    
+    post {
+        success {
+            mail to: "barani6778@gmail.com",
+                subject: "Build Status Email",
+                body: "Build was successfull!"
+        }
+        failure {
+            mail to: "barani6778@gmail.com",
+                subject: "Build Status Email",
+                body: "Build was Failure!"
+        }
+    }
+}
 }
