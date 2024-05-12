@@ -2,8 +2,9 @@ pipeline {
     agent any
 
     environment {
-        CODE_DIRECTORY = "E:/Jenkinsfile/Jenkinsfile.txt"
+        CODE_DIRECTORY = "/path/to/code"
         TEST_ENV = "testing"
+        PROD_ENV = "yourname_production"
         NOTIFICATION_EMAIL = "barani6778@gmail.com"
     }
 
@@ -58,7 +59,12 @@ pipeline {
                 }
             }
         }
-        
+        stage('Deploy to Staging') {
+            steps {
+                echo "Deploying the application to the $TEST_ENV environment"
+                // Add actual staging deployment steps here
+            }
+        }
         stage('Integration Tests on Staging') {
             steps {
                 echo "Running integration tests on staging environment"
