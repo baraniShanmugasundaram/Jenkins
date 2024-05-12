@@ -26,14 +26,14 @@ pipeline {
                 success {
                     mail to: "${env.NOTIFICATION_EMAIL}",
                          subject: "Unit and Integration Tests Passed",
-                         body: "Unit and Integration Tests have passed successfully. See attached logs for details."
-                         <p>Console Output: <a href="${env.BUILD_URL}console">${env.BUILD_URL}console</a></p>
+                         body: "Unit and Integration Tests have passed successfully. See attached logs for details.<br><p>Console Output: <a href='${env.BUILD_URL}console'>${env.BUILD_URL}console</a></p>",
+                         mimeType: 'text/html'
                 }
                 failure {
                     mail to: "${env.NOTIFICATION_EMAIL}",
                          subject: "Unit and Integration Tests Failed",
-                         body: "Unit and Integration Tests have failed. See attached logs for details."
-                         <p>Console Output: <a href="${env.BUILD_URL}console">${env.BUILD_URL}console</a></p>
+                         body: "Unit and Integration Tests have failed. See attached logs for details.<br><p>Console Output: <a href='${env.BUILD_URL}console'>${env.BUILD_URL}console</a></p>",
+                         mimeType: 'text/html'
                 }
             }
         }
@@ -52,12 +52,14 @@ pipeline {
                 success {
                     mail to: "${env.NOTIFICATION_EMAIL}",
                          subject: "Security Scan Passed",
-                         body: "Security scan completed without any vulnerabilities. See attached logs for details."
+                         body: "Security scan completed without any vulnerabilities. See attached logs for details.",
+                         mimeType: 'text/html'
                 }
                 failure {
                     mail to: "${env.NOTIFICATION_EMAIL}",
                          subject: "Security Scan Failed",
-                         body: "Security scan detected vulnerabilities. See attached logs for details."
+                         body: "Security scan detected vulnerabilities. See attached logs for details.",
+                         mimeType: 'text/html'
                 }
             }
         }
