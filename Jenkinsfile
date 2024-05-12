@@ -51,21 +51,19 @@ pipeline {
                 echo 'Deploying to production server...'
                 // Tool: AWS CLI
             }
-        } 
+        }
     }
-     
+    
     post {
         success {
-            emailext subject: "Build Status Email - Success",
-                body: "Build was successful!",
-                to: "barani6778@gmail.com",
-                attachmentsPattern: '*.log' // Attach all log files
+            mail to: "barani6778@gmail.com",
+                subject: "Build Status Email",
+                body: "Build was successfull!"
         }
         failure {
-            emailext subject: "Build Status Email - Failure",
-                body: "Build failed!",
-                to: "barani6778@gmail.com",
-                attachmentsPattern: '*.log' // Attach all log files
+            mail to: "barani6778@gmail.com",
+                subject: "Build Status Email",
+                body: "Build was Failure!"
         }
     }
 }
