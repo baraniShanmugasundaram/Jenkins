@@ -33,6 +33,22 @@ pipeline {
                          subject: "Unit and Integration Tests Failed",
                          body: "Unit and Integration Tests have failed. See attached logs for details."
                 }
+                always {
+                    emailext (
+                        subject: "Pipeline Status: ${currentBuild.result}",
+                        body: '''<html>
+                            <body>
+                            <p>Build Status: ${currentBuild.result}</p>
+                            <p>Build Number: ${currentBuild.number}</p>
+                            <p>Console Output: <a href="${env.NOTIFICATION_EMAIL}console">${env.NOTIFICATION_EMAIL}console</a></p>
+                            </body>
+                            </html>''',
+                        to: 'barani6778@gmail.com',
+                        from: 'jenkins@example.com',
+                        replyTo: 'jenkins@example.com',
+                        mimeType: 'text/html'
+                    )
+                }
             }
         }
         stage('Code Analysis') {
@@ -76,25 +92,6 @@ pipeline {
                 echo "Deploying the code to the $PROD_ENV environment"
                 // Add actual production deployment steps here
             }
-        }
-    }
-
-    post {
-        always {
-            emailext (
-                subject: "Pipeline Status: ${currentBuild.result}",
-                body: '''<html>
-                    <body>
-                    <p>Build Status: ${currentBuild.result}</p>
-                    <p>Build Number: ${currentBuild.number}</p>
-                    <p>Console Output: <a href="${env.NOTIFICATION_EMAIL}console">${env.NOTIFICATION_EMAIL}console</a></p>
-                    </body>
-                    </html>''',
-                to: 'barani6778@gmail.com',
-                from: 'jenkins@example.com',
-                replyTo: 'jenkins@example.com',
-                mimeType: 'text/html'
-            )
         }
     }
 }
