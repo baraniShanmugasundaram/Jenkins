@@ -1,10 +1,6 @@
 pipeline {
     agent any
-    environment {
-        DIRECTORY_PATH = 'E:/Jenkinsfile/Jenkinsfile.txt'
-        TESTING_ENVIRONMENT = 'Testing'
-        PRODUCTION_ENVIRONMENT = 'Barani'
-    }
+
     stages {
         stage('Build') {
             steps {
@@ -60,20 +56,14 @@ pipeline {
     
     post {
         success {
-            script {
-                def logs = currentBuild.log(1000) // Get last 1000 lines of build logs
-                mail to: "barani6778@gmail.com",
-                    subject: "Build Status Email - Success",
-                    body: "Build was successful!\n\nLogs:\n${logs}"
-            }
+            mail to: "barani6778@gmail.com",
+                subject: "Build Status Email",
+                body: "Build was successfull!"
         }
         failure {
-            script {
-                def logs = currentBuild.log(1000) // Get last 1000 lines of build logs
-                mail to: "barani6778@gmail.com",
-                    subject: "Build Status Email - Failure",
-                    body: "Build failed!\n\nLogs:\n${logs}"
-            }
+            mail to: "barani6778@gmail.com",
+                subject: "Build Status Email",
+                body: "Build was Failure!"
         }
     }
 }
