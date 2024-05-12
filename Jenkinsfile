@@ -61,7 +61,7 @@ pipeline {
     post {
         success {
             script {
-                def logs = currentBuild.rawBuild.getLog(1000)
+                def logs = currentBuild.log(1000) // Get last 1000 lines of build logs
                 mail to: "barani6778@gmail.com",
                     subject: "Build Status Email - Success",
                     body: "Build was successful!\n\nLogs:\n${logs}"
@@ -69,7 +69,7 @@ pipeline {
         }
         failure {
             script {
-                def logs = currentBuild.rawBuild.getLog(1000) 
+                def logs = currentBuild.log(1000) // Get last 1000 lines of build logs
                 mail to: "barani6778@gmail.com",
                     subject: "Build Status Email - Failure",
                     body: "Build failed!\n\nLogs:\n${logs}"
