@@ -87,7 +87,7 @@ pipeline {
                     <body>
                     <p>Build Status: ${currentBuild.result}</p>
                     <p>Build Number: ${currentBuild.number}</p>
-                    <p>Check the <a href="${env.BUILD_URL}">console output</a>.</p>
+                    <p>Console Output: <a href="${env.NOTIFICATION_EMAIL}console">${env.NOTIFICATION_EMAIL}console</a></p>
                     </body>
                     </html>''',
                 to: 'barani6778@gmail.com',
