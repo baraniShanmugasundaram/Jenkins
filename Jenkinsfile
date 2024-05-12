@@ -8,14 +8,14 @@ pipeline {
         NOTIFICATION_EMAIL = "barani6778@gmail.com"
     }
 
-    stages { 
+    stages {
         stage('Build') {
             steps {
                 echo "Fetching the source code from: $CODE_DIRECTORY"
                 echo "Compiling the code and generating artifacts"
                 // Add actual build steps here
             }
-        } 
+        }
         stage('Unit and Integration Tests') {
             steps {
                 echo "Running unit tests"
@@ -32,22 +32,6 @@ pipeline {
                     mail to: "${env.NOTIFICATION_EMAIL}",
                          subject: "Unit and Integration Tests Failed",
                          body: "Unit and Integration Tests have failed. See attached logs for details."
-                }
-                always {
-                    emailext (
-                        subject: "Pipeline Status: ${currentBuild.result}",
-                        body: '''<html>
-                            <body>
-                            <p>Build Status: ${currentBuild.result}</p>
-                            <p>Build Number: ${currentBuild.number}</p>
-                            <p>Console Output: <a href="${env.BUILD_URL}console">${env.BUILD_URL}console</a></p>
-                            </body>
-                            </html>''',
-                        to: 'barani6778@gmail.com',
-                        from: 'jenkins@example.com',
-                        replyTo: 'jenkins@example.com',
-                        mimeType: 'text/html'
-                    )
                 }
             }
         }
@@ -92,6 +76,25 @@ pipeline {
                 echo "Deploying the code to the $PROD_ENV environment"
                 // Add actual production deployment steps here
             }
+        }
+    }
+
+    post {
+        always {
+            emailext (
+                subject: "Pipeline Status: ${currentBuild.result}",
+                body: '''<html>
+                    <body>
+                    <p>Build Status: ${currentBuild.result}</p>
+                    <p>Build Number: ${currentBuild.number}</p>
+                    <p>Console Output: <a href="${env.BUILD_URL}console">${env.BUILD_URL}console</a></p>
+                    </body>
+                    </html>''',
+                to: 'barani6778@gmail.com',
+                from: 'jenkins@example.com',
+                replyTo: 'jenkins@example.com',
+                mimeType: 'text/html'
+            )
         }
     }
 }
