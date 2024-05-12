@@ -26,13 +26,13 @@ pipeline {
                 success {
                     mail to: "${env.NOTIFICATION_EMAIL}",
                          subject: "Unit and Integration Tests Passed",
-                         body: "Unit and Integration Tests have passed successfully. See attached logs for details.<br><p>Console Output: <a href='${env.BUILD_URL}console'>${env.BUILD_URL}console</a></p>",
+                         body: "Unit and Integration Tests have passed successfully. See attached logs for details.\nConsole Output: ${env.BUILD_URL}console",
                          mimeType: 'text/html'
                 }
                 failure {
                     mail to: "${env.NOTIFICATION_EMAIL}",
                          subject: "Unit and Integration Tests Failed",
-                         body: "Unit and Integration Tests have failed. See attached logs for details.<br><p>Console Output: <a href='${env.BUILD_URL}console'>${env.BUILD_URL}console</a></p>",
+                         body: "Unit and Integration Tests have failed. See attached logs for details.\nConsole Output: ${env.BUILD_URL}console",
                          mimeType: 'text/html'
                 }
             }
