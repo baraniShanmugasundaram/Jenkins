@@ -5,9 +5,6 @@ pipeline {
         TESTING_ENVIRONMENT = 'Testing'
         PRODUCTION_ENVIRONMENT = 'Barani'
     }
-    pipeline {
-    agent any
-
     stages {
         stage('Build') {
             steps {
@@ -63,15 +60,20 @@ pipeline {
     
     post {
         success {
-            mail to: "barani6778@gmail.com",
-                subject: "Build Status Email",
-                body: "Build was successfull!"
+            script {
+                def logs = currentBuild.rawBuild.getLog(1000)
+                mail to: "barani6778@gmail.com",
+                    subject: "Build Status Email - Success",
+                    body: "Build was successful!\n\nLogs:\n${logs}"
+            }
         }
         failure {
-            mail to: "barani6778@gmail.com",
-                subject: "Build Status Email",
-                body: "Build was Failure!"
+            script {
+                def logs = currentBuild.rawBuild.getLog(1000) 
+                mail to: "barani6778@gmail.com",
+                    subject: "Build Status Email - Failure",
+                    body: "Build failed!\n\nLogs:\n${logs}"
+            }
         }
     }
-}
 }
