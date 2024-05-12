@@ -51,7 +51,7 @@ pipeline {
                 echo 'Deploying to production server...'
                 // Tool: AWS CLI
             }
-        }
+        } 
     }
     
     post {
