@@ -52,13 +52,13 @@ pipeline {
                 success {
                     mail to: "${env.NOTIFICATION_EMAIL}",
                          subject: "Security Scan Passed",
-                         body: "Security scan completed without any vulnerabilities. See attached logs for details.",
+                         body: "Security scan completed without any vulnerabilities. See attached logs for details.\nConsole Output: ${env.BUILD_URL}console",
                          mimeType: 'text/html'
                 }
                 failure {
                     mail to: "${env.NOTIFICATION_EMAIL}",
                          subject: "Security Scan Failed",
-                         body: "Security scan detected vulnerabilities. See attached logs for details.",
+                         body: "Security scan detected vulnerabilities. See attached logs for details.\nConsole Output: ${env.BUILD_URL}console",
                          mimeType: 'text/html'
                 }
             }
