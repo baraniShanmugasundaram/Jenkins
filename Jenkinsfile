@@ -58,12 +58,7 @@ pipeline {
                 }
             }
         }
-        stage('Deploy to Staging') {
-            steps {
-                echo "Deploying the application to the $TEST_ENV environment"
-                // Add actual staging deployment steps here
-            }
-        }
+        
         stage('Integration Tests on Staging') {
             steps {
                 echo "Running integration tests on staging environment"
