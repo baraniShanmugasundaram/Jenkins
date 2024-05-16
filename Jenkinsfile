@@ -6,6 +6,7 @@ pipeline {
         TEST_ENV = "testing"
         PROD_ENV = "yourname_production"
         NOTIFICATION_EMAIL = "barani6778@gmail.com"
+        LOGS_PATH = "C:\\Users\\baran\\AppData\\Local\\Jenkins\\.jenkins\\workspace\\6.1C_Jenkins_Git\\logs" // Define the path to store logs
     } 
 
     stages {
@@ -13,7 +14,22 @@ pipeline {
             steps {
                 echo "Fetching the source code from: $CODE_DIRECTORY" 
                 echo "Compiling the code and generating artifacts"
-                // Add actual build steps here
+                script {
+                    // Save the console output to a file
+                    sh "echo Fetching the source code from: $CODE_DIRECTORY > $LOGS_PATH\\build_logs.txt"
+                    sh "echo Compiling the code and generating artifacts >> $LOGS_PATH\\build_logs.txt"
+                    // Add actual build commands here and append output to the log file
+                    // sh "<your-build-command> >> $LOGS_PATH\\build_logs.txt 2>&1"
+                }
+            }
+            post {
+                always {
+                    mail to: "${env.NOTIFICATION_EMAIL}",
+                         subject: "Build Process Notification",
+                         body: "The build process has completed. Please see the attached logs for details.",
+                         attachmentsPattern: "$LOGS_PATH\\build_logs.txt",
+                         mimeType: 'text/html'
+                }
             }
         }
         stage('Unit and Integration Tests') {
