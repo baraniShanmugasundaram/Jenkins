@@ -30,18 +30,22 @@ pipeline {
             }
             post {
                 success {
-                    mail to: "${env.NOTIFICATION_EMAIL}",
-                         subject: "Unit and Integration Tests Passed",
-                         body: "Unit and Integration Tests have passed successfully. See attached logs for details.",
-                         attachmentsPattern: "${env.LOG_PATH}\\unit_tests.log",
-                         mimeType: 'text/html'
+                    emailext (
+                        subject: "Unit and Integration Tests Passed",
+                        body: "Unit and Integration Tests have passed successfully. See attached logs for details.",
+                        to: "${env.NOTIFICATION_EMAIL}",
+                        mimeType: 'text/html',
+                        attachmentsPattern: "${env.LOG_PATH}\\unit_tests.log"
+                    )
                 }
                 failure {
-                    mail to: "${env.NOTIFICATION_EMAIL}",
-                         subject: "Unit and Integration Tests Failed",
-                         body: "Unit and Integration Tests have failed. See attached logs for details.",
-                         attachmentsPattern: "${env.LOG_PATH}\\unit_tests.log",
-                         mimeType: 'text/html'
+                    emailext (
+                        subject: "Unit and Integration Tests Failed",
+                        body: "Unit and Integration Tests have failed. See attached logs for details.",
+                        to: "${env.NOTIFICATION_EMAIL}",
+                        mimeType: 'text/html',
+                        attachmentsPattern: "${env.LOG_PATH}\\unit_tests.log"
+                    )
                 }
             }
         }
@@ -62,18 +66,22 @@ pipeline {
             }
             post {
                 success {
-                    mail to: "${env.NOTIFICATION_EMAIL}",
-                         subject: "Security Scan Passed",
-                         body: "Security scan completed without any vulnerabilities. See attached logs for details.",
-                         attachmentsPattern: "${env.LOG_PATH}\\security_scan.log",
-                         mimeType: 'text/html'
+                    emailext (
+                        subject: "Security Scan Passed",
+                        body: "Security scan completed without any vulnerabilities. See attached logs for details.",
+                        to: "${env.NOTIFICATION_EMAIL}",
+                        mimeType: 'text/html',
+                        attachmentsPattern: "${env.LOG_PATH}\\security_scan.log"
+                    )
                 }
                 failure {
-                    mail to: "${env.NOTIFICATION_EMAIL}",
-                         subject: "Security Scan Failed",
-                         body: "Security scan detected vulnerabilities. See attached logs for details.",
-                         attachmentsPattern: "${env.LOG_PATH}\\security_scan.log",
-                         mimeType: 'text/html'
+                    emailext (
+                        subject: "Security Scan Failed",
+                        body: "Security scan detected vulnerabilities. See attached logs for details.",
+                        to: "${env.NOTIFICATION_EMAIL}",
+                        mimeType: 'text/html',
+                        attachmentsPattern: "${env.LOG_PATH}\\security_scan.log"
+                    )
                 }
             }
         }
