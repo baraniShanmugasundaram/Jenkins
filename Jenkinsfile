@@ -2,109 +2,102 @@ pipeline {
     agent any
 
     environment {
-        CODE_DIRECTORY = "/path/to/code"
+        CODE_DIRECTORY = "/path/to/code"  // Ensure this is correctly set
         TEST_ENV = "testing"
         PROD_ENV = "yourname_production"
         NOTIFICATION_EMAIL = "barani6778@gmail.com"
-        LOGS_PATH = "C:\\Users\\baran\\AppData\\Local\\Jenkins\\.jenkins\\workspace\\6.1C_Jenkins_Git\\logs"
-    } 
+        LOG_PATH = "${WORKSPACE}\\logs"  // Logs in the workspace directory
+    }
 
     stages {
         stage('Build') {
             steps {
-                echo "Fetching the source code from: $CODE_DIRECTORY" 
-                echo "Compiling the code and generating artifacts"
                 script {
-                    // Save the console output to a file
-                    sh "echo Fetching the source code from: $CODE_DIRECTORY > $LOGS_PATH\\build_logs.txt"
-                    sh "echo Compiling the code and generating artifacts >> $LOGS_PATH\\build_logs.txt"
-                    // Add actual build commands here and append output to the log file
-                    // sh "<your-build-command> >> $LOGS_PATH\\build_logs.txt 2>&1"
-                }
-            }
-            post {
-                always {
-                    emailext (
-                        to: "${env.NOTIFICATION_EMAIL}",
-                        subject: "Build Process Notification",
-                        body: "The build process has completed. Please see the attached logs for details.",
-                        attachments: ["$LOGS_PATH\\build_logs.txt"],
-                        mimeType: 'text/html'
-                    )
+                    bat "if not exist \"${env.LOG_PATH}\" mkdir \"${env.LOG_PATH}\""
+                    bat "echo Fetching the source code from: $CODE_DIRECTORY > \"${env.LOG_PATH}\\build.log\""
+                    bat "echo Compiling the code and generating artifacts >> \"${env.LOG_PATH}\\build.log\""
                 }
             }
         }
         stage('Unit and Integration Tests') {
             steps {
-                echo "Running unit tests"
-                echo "Running integration tests"
-                // Add actual test steps here
+                script {
+                    bat "if not exist \"${env.LOG_PATH}\" mkdir \"${env.LOG_PATH}\""
+                    bat "echo Running unit tests > \"${env.LOG_PATH}\\unit_tests.log\""
+                    bat "echo Running integration tests >> \"${env.LOG_PATH}\\unit_tests.log\""
+                }
             }
             post {
                 success {
                     emailext (
-                        to: "${env.NOTIFICATION_EMAIL}",
                         subject: "Unit and Integration Tests Passed",
-                        body: "Unit and Integration Tests have passed successfully. See attached logs for details.\nConsole Output: ${env.BUILD_URL}console",
-                        mimeType: 'text/html'
+                        body: "All unit and integration tests have passed. See Jenkins for details.",
+                        to: "${env.NOTIFICATION_EMAIL}"
                     )
                 }
                 failure {
                     emailext (
-                        to: "${env.NOTIFICATION_EMAIL}",
                         subject: "Unit and Integration Tests Failed",
-                        body: "Unit and Integration Tests have failed. See attached logs for details.\nConsole Output: ${env.BUILD_URL}console",
-                        mimeType: 'text/html'
+                        body: "Some unit or integration tests have failed. Check Jenkins for more information.",
+                        to: "${env.NOTIFICATION_EMAIL}"
                     )
                 }
             }
         }
         stage('Code Analysis') {
             steps {
-                echo 'Checking the quality of the code'
-                // Add actual code quality check steps here
+                script {
+                    bat "if not exist \"${env.LOG_PATH}\" mkdir \"${env.LOG_PATH}\""
+                    bat "echo Performing code analysis > \"${env.LOG_PATH}\\code_analysis.log\""
+                }
             }
         }
         stage('Security Scan') {
             steps {
-                echo 'Performing security scan'
-                // Add actual security scan steps here
+                script {
+                    bat "if not exist \"${env.LOG_PATH}\" mkdir \"${env.LOG_PATH}\""
+                    bat "echo Performing security scan > \"${env.LOG_PATH}\\security_scan.log\""
+                }
             }
             post {
                 success {
                     emailext (
-                        to: "${env.NOTIFICATION_EMAIL}",
                         subject: "Security Scan Passed",
-                        body: "Security scan completed without any vulnerabilities. See attached logs for details.\nConsole Output: ${env.BUILD_URL}console",
-                        mimeType: 'text/html'
+                        body: "Security scan completed successfully without any vulnerabilities.",
+                        to: "${env.NOTIFICATION_EMAIL}"
                     )
                 }
                 failure {
                     emailext (
-                        to: "${env.NOTIFICATION_EMAIL}",
                         subject: "Security Scan Failed",
-                        body: "Security scan detected vulnerabilities. See attached logs for details.\nConsole Output: ${env.BUILD_URL}console",
-                        mimeType: 'text/html'
+                        body: "Security scan detected vulnerabilities. Please review the scan results.",
+                        to: "${env.NOTIFICATION_EMAIL}"
                     )
                 }
             }
         }
         stage('Deploy to Staging') {
             steps {
-                echo "Deploying the application to the $TEST_ENV environment"
-                // Add actual staging deployment steps here
+                script {
+                    bat "if not exist \"${env.LOG_PATH}\" mkdir \"${env.LOG_PATH}\""
+                    bat "echo Deploying to staging environment > \"${env.LOG_PATH}\\staging_deploy.log\""
+                }
             }
         }
         stage('Integration Tests on Staging') {
             steps {
-                echo "Running integration tests on staging environment"
-                // Add actual integration tests on staging steps here
+                script {
+                    bat "if not exist \"${env.LOG_PATH}\" mkdir \"${env.LOG_PATH}\""
+                    bat "echo Running integration tests on staging > \"${env.LOG_PATH}\\staging_tests.log\""
+                }
             }
         }
         stage('Deploy to Production') {
             steps {
-                echo "Deploying the code to the $PROD_ENV environment"
-                // Add actual production deployment steps here
+                script {
+                    bat "if not exist \"${env.LOG_PATH}\" mkdir \"${env.LOG_PATH}\""
+                    bat "echo Deploying to production environment > \"${env.LOG_PATH}\\production_deploy.log\""
+                }
             }
         }
     }
@@ -113,17 +106,8 @@ pipeline {
         always {
             emailext (
                 subject: "Pipeline Status: ${currentBuild.result}",
-                body: '''<html>
-                    <body>
-                    <p>Build Status: ${currentBuild.result}</p>
-                    <p>Build Number: ${currentBuild.number}</p>
-                    <p>Console Output: <a href="${env.BUILD_URL}console">${env.BUILD_URL}console</a></p>
-                    </body>
-                    </html>''',
-                to: 'barani6778@gmail.com',
-                from: 'jenkins@example.com',
-                replyTo: 'jenkins@example.com',
-                mimeType: 'text/html'
+                body: "Pipeline execution complete with status: ${currentBuild.result}. Check Jenkins for more details.",
+                to: "${env.NOTIFICATION_EMAIL}"
             )
         }
     }
