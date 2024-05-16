@@ -6,7 +6,7 @@ pipeline {
         TEST_ENV = "testing"
         PROD_ENV = "yourname_production"
         NOTIFICATION_EMAIL = "barani6778@gmail.com"
-        LOGS_PATH = "C:\\Users\\baran\\AppData\\Local\\Jenkins\\.jenkins\\workspace\\6.1C_Jenkins_Git\\logs" // Define the path to store logs
+        LOGS_PATH = "C:\\Users\\baran\\AppData\\Local\\Jenkins\\.jenkins\\workspace\\6.1C_Jenkins_Git\\logs"
     } 
 
     stages {
@@ -24,11 +24,13 @@ pipeline {
             }
             post {
                 always {
-                    mail to: "${env.NOTIFICATION_EMAIL}",
-                         subject: "Build Process Notification",
-                         body: "The build process has completed. Please see the attached logs for details.",
-                         attachmentsPattern: "$LOGS_PATH\\build_logs.txt",
-                         mimeType: 'text/html'
+                    emailext (
+                        to: "${env.NOTIFICATION_EMAIL}",
+                        subject: "Build Process Notification",
+                        body: "The build process has completed. Please see the attached logs for details.",
+                        attachments: ["$LOGS_PATH\\build_logs.txt"],
+                        mimeType: 'text/html'
+                    )
                 }
             }
         }
@@ -40,16 +42,20 @@ pipeline {
             }
             post {
                 success {
-                    mail to: "${env.NOTIFICATION_EMAIL}",
-                         subject: "Unit and Integration Tests Passed",
-                         body: "Unit and Integration Tests have passed successfully. See attached logs for details.\nConsole Output: ${env.BUILD_URL}console",
-                         mimeType: 'text/html'
+                    emailext (
+                        to: "${env.NOTIFICATION_EMAIL}",
+                        subject: "Unit and Integration Tests Passed",
+                        body: "Unit and Integration Tests have passed successfully. See attached logs for details.\nConsole Output: ${env.BUILD_URL}console",
+                        mimeType: 'text/html'
+                    )
                 }
                 failure {
-                    mail to: "${env.NOTIFICATION_EMAIL}",
-                         subject: "Unit and Integration Tests Failed",
-                         body: "Unit and Integration Tests have failed. See attached logs for details.\nConsole Output: ${env.BUILD_URL}console",
-                         mimeType: 'text/html'
+                    emailext (
+                        to: "${env.NOTIFICATION_EMAIL}",
+                        subject: "Unit and Integration Tests Failed",
+                        body: "Unit and Integration Tests have failed. See attached logs for details.\nConsole Output: ${env.BUILD_URL}console",
+                        mimeType: 'text/html'
+                    )
                 }
             }
         }
@@ -66,16 +72,20 @@ pipeline {
             }
             post {
                 success {
-                    mail to: "${env.NOTIFICATION_EMAIL}",
-                         subject: "Security Scan Passed",
-                         body: "Security scan completed without any vulnerabilities. See attached logs for details.\nConsole Output: ${env.BUILD_URL}console",
-                         mimeType: 'text/html'
+                    emailext (
+                        to: "${env.NOTIFICATION_EMAIL}",
+                        subject: "Security Scan Passed",
+                        body: "Security scan completed without any vulnerabilities. See attached logs for details.\nConsole Output: ${env.BUILD_URL}console",
+                        mimeType: 'text/html'
+                    )
                 }
                 failure {
-                    mail to: "${env.NOTIFICATION_EMAIL}",
-                         subject: "Security Scan Failed",
-                         body: "Security scan detected vulnerabilities. See attached logs for details.\nConsole Output: ${env.BUILD_URL}console",
-                         mimeType: 'text/html'
+                    emailext (
+                        to: "${env.NOTIFICATION_EMAIL}",
+                        subject: "Security Scan Failed",
+                        body: "Security scan detected vulnerabilities. See attached logs for details.\nConsole Output: ${env.BUILD_URL}console",
+                        mimeType: 'text/html'
+                    )
                 }
             }
         }
