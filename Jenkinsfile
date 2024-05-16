@@ -26,7 +26,7 @@ pipeline {
                     bat "echo Running unit tests > \"${env.LOG_PATH}\\unit_tests.log\""
                     bat "echo Running integration tests >> \"${env.LOG_PATH}\\unit_tests.log\""
                 }
-            }
+            }  
             post {
                 success {
                     emailext (
