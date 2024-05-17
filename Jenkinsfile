@@ -90,7 +90,7 @@ pipeline {
                     bat "if not exist \"${env.LOG_PATH}\" mkdir \"${env.LOG_PATH}\""
                     bat "echo Running integration tests on staging > \"${env.LOG_PATH}\\staging_tests.log\""
                 }
-            }
+            } 
         }
         stage('Deploy to Production') {
             steps {
